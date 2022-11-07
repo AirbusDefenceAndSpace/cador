@@ -1,0 +1,44 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              88.0,
+              40.0
+            ],
+            [
+              81.0,
+              43.0
+            ],
+            [
+              110.0,
+              50.0
+            ],
+            [
+              94.0,
+              40.0
+            ],
+            [
+              93.0,
+              41.0
+            ],
+            [
+              88.0,
+              40.0
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "category": "Buildings",
+        "confidence": 0.5007396340370178,
+        "fillColor": "#CC6666"
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}

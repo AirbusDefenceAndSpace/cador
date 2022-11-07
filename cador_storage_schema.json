@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "CADoR Output Storage Configuration",
+  "description": "Configuration for CADOR output writting on Object Storage",
+  "type": "object",
+  "properties": {
+    "S3": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "url for S3 Object Storage server"
+        },
+        "key": {
+          "type": "string",
+          "description": "Key for authentification"
+        },
+        "secret": {
+          "type": "string",
+          "description": "secret for authentification"
+        },
+        "ssl": {
+          "type": "boolean",
+          "description": "is ssl enable or not"
+        },
+        "containerPath": {
+          "type": "string",
+          "description": "full path to container"
+        }
+      },
+      "required": [
+        "url",
+        "key",
+        "secret",
+        "ssl",
+        "containerPath"
+      ]
+    },
+    "GCS": {
+      "type": "object",
+      "properties": {
+        "containerPath": {
+          "type": "string",
+          "description": "container name"
+        },
+        "key": {
+          "type": "string",
+          "description": "Key for authentification"
+        },
+        "secret": {
+          "type": "string",
+          "description": "secret for authentification"
+        }
+      },
+      "required": [
+        "containerPath",
+        "key",
+        "secret"
+      ]
+    },
+    "POSIX": {
+      "type": "object",
+      "properties": {
+        "folder": {
+          "type": "string",
+          "description": "folder name"
+        }
+      },
+      "required": [
+        "folder"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "required": [
+        "S3"
+      ]
+    },
+    {
+      "required": [
+        "GCS"
+      ]
+    },
+    {
+      "required": [
+        "POSIX"
+      ]
+    }
+  ]
+}

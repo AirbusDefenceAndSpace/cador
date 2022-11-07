@@ -1,0 +1,44 @@
+FROM alpine:latest
+
+# Proxy handling
+ARG HTTP_PROXY
+ENV http_proxy "$HTTP_PROXY"
+ENV https_proxy "$HTTP_PROXY"
+
+# Add community repositories
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+
+RUN apk --update add --no-cache bash \ 
+            make \
+            gcc  \
+            python3 python3-dev \
+            musl-dev \
+            geos
+
+
+RUN if [ "$HTTP_PROXY" != "" ]; \
+    then \
+        echo "[global]" >> /etc/pip.conf && echo "proxy = ${HTTP_PROXY}" >> /etc/pip.conf \
+        && echo "trusted-host = pypi.python.org pypi.org files.pythonhosted.org " >> /etc/pip.conf; \
+    fi
+
+RUN pip3 install --upgrade pip
+RUN pip3 install setuptools wheel
+
+RUN mkdir /tmp/cador
+COPY cador-build /tmp/cador
+
+RUN cd /tmp && cd cador && python3 setup.py bdist_wheel &&  python3 setup.py sdist \
+	&& pip3 install dist/*cador*whl && cd /tmp && rm -rf cador
+
+CMD python3 -c 
+
+# Prepare env for running : disable proxies
+RUN if [ "$HTTP_PROXY" != "" ]; \
+    then \
+        rm /etc/pip.conf; \
+    fi
+
+ENV http_proxy ""
+ENV https_proxy ""
+
