@@ -2,10 +2,10 @@ Sanic==0.8.3
 sanic-openapi
 requests-file
 jsonschema
-aiokafka==0.4.0
+aiokafka
 apache-libcloud
 trio
-kafka
+kafka-python
 shapely
 boto3
 pyopenssl

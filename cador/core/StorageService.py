@@ -52,10 +52,11 @@ class S3Service(StorageService):
         self.container_folder = os.path.join(*parts[1:]) if len(parts) > 1 else ''
 
         self.s3 = boto3.resource('s3',
-                                 use_ssl=False,
+                                 use_ssl=config.get('ssl') or False,
                                  endpoint_url=(config['url']),
                                  aws_access_key_id=(config['key']),
-                                 aws_secret_access_key=(config['secret']))
+                                 aws_secret_access_key=(config['secret']),
+                                 verify=False)
 
     def init(self):
         try:
