@@ -18,7 +18,7 @@ class RequestService:
         Get service information from describe, call the async routine
         """
         if not cador_config.cador_cache_service_description:
-            r = requests.get(cador_config.CADOR_ALGO_SRV + '/describe')
+            r = requests.get(cador_config.CADOR_ALGO_SRV + '/describe', verify=False)
             if r.status_code != 200:
                 message = 'Bad response : server algorithm send {0} with code {1}'.format(r.text, r.status_code)
                 raise ValueError(message)
@@ -55,12 +55,12 @@ class RequestService:
 
     @staticmethod
     async def async_post(url, payload):
-        r = await RequestService.async_exec(partial(requests.post, url, json=payload))
+        r = await RequestService.async_exec(partial(requests.post, url, json=payload, verify=False))
         return response.raw(r.content, status=r.status_code)
 
     @staticmethod
     async def async_get(url):
-        return await RequestService.async_exec(partial(requests.get, url))
+        return await RequestService.async_exec(partial(requests.get, url, verify=False))
 
     @staticmethod
     async def async_get_text(url):
@@ -101,7 +101,7 @@ class RequestService:
 
     @staticmethod
     async def async_delete(url):
-        return await RequestService.async_exec(partial(requests.delete, url))
+        return await RequestService.async_exec(partial(requests.delete, url, verify=False))
 
     @staticmethod
     async def async_delete_json(url):
@@ -111,7 +111,7 @@ class RequestService:
         :return a Sanic response
         """
         try:
-            r = await RequestService.async_exec(partial(requests.delete, url))
+            r = await RequestService.async_exec(partial(requests.delete, url, verify=False))
             return response.json(r.json(), headers=RequestService.HEADERS, status=r.status_code)
         except Exception as e:
             log.exception(e)
@@ -126,7 +126,7 @@ class RequestService:
         :return a Sanic response
         """
         try:
-            r = await RequestService.async_exec(partial(requests.put, url=url, json=payload))
+            r = await RequestService.async_exec(partial(requests.put, url=url, json=payload, verify=False))
             return response.json(r.json(), status=r.status_code)
         except Exception as e:
             log.exception(e)

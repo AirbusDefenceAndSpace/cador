@@ -1,4 +1,4 @@
-VERSION=0.7.7-ubuntu
+VERSION=0.7.8-ubuntu
 
 all: build
 

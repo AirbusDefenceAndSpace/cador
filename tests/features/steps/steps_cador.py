@@ -91,7 +91,7 @@ def _generate_payload(path, image_prefix='file://'):
 
 
 def download_result(URL, link):
-    response = requests.get('{}{}'.format(URL, link))
+    response = requests.get('{}{}'.format(URL, link), verify=False)
     tmp_path = '/tmp/{}'.format(str(uuid.uuid4()))
     with open(tmp_path, 'wb') as fd:
         for chunk in response.iter_content(chunk_size=128):

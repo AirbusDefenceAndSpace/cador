@@ -2,6 +2,8 @@ import argparse
 import asyncio
 import os
 
+from OpenSSL import crypto
+
 from sanic import Sanic
 from sanic_openapi import swagger_blueprint, openapi_blueprint
 
@@ -71,6 +73,7 @@ def start():
     # environment variables
     try:
         cador_port = os.environ['CADOR_PORT']
+        use_ssl = bool(os.environ.get('CADOR_USE_SSL'))
         algo_server = os.environ['PROCESSING_SERVER']
 
         input_brokers = os.environ.get('KAFKA_BROKERS_REQUEST')
@@ -101,7 +104,37 @@ def start():
     cador_config.CADOR_QUEUES['tags'] = KafkaTopic('tags', tags_brokers, tags_topic)
 
     log_app_conf()
-    cador_app.run(host='0.0.0.0', port=int(cador_port))
+
+    if use_ssl:
+        configure_ssl()
+        cador_app.run(host='0.0.0.0', port=int(cador_port), ssl={'cert': "/tmp/cert.pem", 'key': "/tmp/key.pem"})
+    else:
+        cador_app.run(host='0.0.0.0', port=int(cador_port))
+
+
+def configure_ssl() -> None:
+    # create a key pair
+    k = crypto.PKey()
+    k.generate_key(crypto.TYPE_RSA, 4096)
+    # create a self-signed cert
+    cert = crypto.X509()
+    cert.get_subject().C = "FR"
+    cert.get_subject().ST = "stateOrProvinceName"
+    cert.get_subject().L = "localityName"
+    cert.get_subject().O = "organizationName"
+    cert.get_subject().OU = "organizationUnitName"
+    cert.get_subject().CN = "commonName"
+    cert.get_subject().emailAddress = "cador@localhost"
+    cert.set_serial_number(0)
+    cert.gmtime_adj_notBefore(0)
+    cert.gmtime_adj_notAfter(10*365*24*60*60)
+    cert.set_issuer(cert.get_subject())
+    cert.set_pubkey(k)
+    cert.sign(k, 'sha512')
+    with open(os.path.join('tmp', "cert.pem"), "wt") as f:
+        f.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert).decode("utf-8"))
+    with open(os.path.join('tmp', "key.pem"), "wt") as f:
+        f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, k).decode("utf-8"))
 
 
 def log_app_conf():

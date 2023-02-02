@@ -8,3 +8,4 @@ trio
 kafka
 shapely
 boto3
+pyopenssl
