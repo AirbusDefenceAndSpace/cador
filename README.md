@@ -1,22 +1,8 @@
 # Cradle For Algorithm Docker
 
-Python 3.5 cradle for algorithm dockers, based on Sanic, so asynchronous and blazing fast.
+CADOR is a wrapper for [GeoProcessingAPI](https://github.com/AirbusDefenceAndSpace/geoprocessing-api/tree/master/1.0)-compliant services. CADOR listens to a kafka topic, runs a process upon receiving a message, and can optionally write output images in an object storage.
 
 # Get started
-
-## Prerequisite
-
-To build and use CADoR you will need (see requirements) : 
- * Python >= 3.5
-* Sanic==0.7.0
-* sanic-openapi
-* requests-file
-* jsonschema
-* aiokafka==0.4.0
-* apache-libcloud
-* trio
-* kafka
-* shapely
 
 ## Install & build
 
@@ -110,6 +96,9 @@ POSIX storage :
     }
   },
 ```
+
+[Example payload](https://github.com/AirbusDefenceAndSpace/cador/blob/master/tests/integration_tests/http/run_cador_with_kafka.py#L62) storing the result in a S3 storage.
+
 ## Configuration
 You can configure the server with the following environement variables : 
 
@@ -126,5 +115,4 @@ You can configure the server with the following environement variables :
  * KAFKA_BROKERS_TAGS : queue to push tags, not mandatory
  * EOPAAS_JOB_TAGS_TOPIC : topic to push tags
 
-
-
+[Example configuration](https://github.com/AirbusDefenceAndSpace/cador/blob/master/tests/integration_tests/http/docker-compose.yaml#L40)
