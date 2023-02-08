@@ -103,7 +103,7 @@ POSIX storage :
 You can configure the server with the following environement variables : 
 
  * CADOR_PORT : port where the server run
- * CADOR_USE_SSL : whether to use SSL or not (call the service with `https` scheme if activated)
+ * CADOR_USE_SSL : whether to use SSL or not (call the service with `https` scheme if set to `"true"`)
  * PROCESSING_SERVER : address of the algorithm docker to bin with
  * KAFKA_BROKERS_REQUEST : queue_in to read request orders (only kafka is available for now). Not mandatory, if not provided only REST API is available
  * EOPAAS_JOB_REQUEST_TOPIC : queue_in topic, mandatory if queue_in specified
